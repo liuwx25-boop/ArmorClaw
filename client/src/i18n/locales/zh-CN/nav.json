@@ -1,0 +1,37 @@
+{
+  "groups": {
+    "ai": {
+      "label": "AI大模型",
+      "platformKeys": "平台Key管理",
+      "byok": "自带Key配置"
+    },
+    "im": {
+      "label": "IM通信"
+    },
+    "sessions": {
+      "label": "会话"
+    },
+    "skills": {
+      "label": "Skill管理"
+    },
+    "container": {
+      "label": "容器资源"
+    },
+    "files": {
+      "label": "文件目录"
+    },
+    "terminal": {
+      "label": "容器终端"
+    }
+  },
+  "docs": "产品文档",
+  "logout": "退出登录",
+  "serviceStatus": {
+    "running": "服务运行中",
+    "stopped": "服务已停止"
+  },
+  "actions": {
+    "stopService": "停止服务",
+    "startService": "启动服务"
+  }
+}

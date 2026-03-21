@@ -1,0 +1,9 @@
+{
+  "title": "Container Terminal",
+  "header": "armorclaw:/bin/bash",
+  "notAvailable": "Terminal is only available in Electron environment",
+  "containerNotRunning": "Container not running",
+  "startContainerHint": "Start the ArmorClaw container to use terminal",
+  "exited": "Process exited (code: {{code}})",
+  "reconnect": "Reconnect"
+}

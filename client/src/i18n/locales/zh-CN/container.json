@@ -1,0 +1,73 @@
+{
+  "resources": {
+    "title": "容器资源",
+    "subtitle": "查看和管理 openclaw 容器的资源配置与使用情况",
+    "tabs": {
+      "usage": "实际利用率",
+      "limits": "资源限制",
+      "settings": "资源设置"
+    },
+    "autoRefresh": "自动刷新",
+    "refresh": "刷新",
+    "loading": "加载容器资源信息...",
+    "error": "获取容器资源信息失败，请确认容器正在运行",
+    "electronOnly": "仅在桌面客户端中可用"
+  },
+  "metrics": {
+    "cpu": "CPU",
+    "memory": "内存",
+    "processes": "进程数",
+    "disk": "磁盘使用",
+    "networkIO": "网络 I/O",
+    "diskIO": "磁盘 I/O",
+    "inboundOutbound": "入站 / 出站",
+    "readWrite": "读取 / 写入"
+  },
+  "settings": {
+    "title": "资源配置",
+    "saveAndApply": "保存并应用",
+    "reset": "重置",
+    "restartNow": "立即重启容器",
+    "saving": "保存中...",
+    "saved": "已保存",
+    "restartRequired": "需要重启容器才能生效"
+  },
+  "presets": {
+    "light": {
+      "name": "轻量模式",
+      "desc": "日常简单问答"
+    },
+    "standard": {
+      "name": "标准模式",
+      "desc": "常规使用推荐"
+    },
+    "high": {
+      "name": "高性能模式",
+      "desc": "复杂 Skill 执行"
+    }
+  },
+  "installer": {
+    "title": "ArmorClaw",
+    "subtitle": "AI 智能助手",
+    "checking": "环境检测",
+    "os": "操作系统",
+    "docker": "Docker 环境",
+    "dockerStatus": "Docker 运行状态",
+    "installed": "已安装",
+    "notInstalled": "未安装",
+    "running": "运行中",
+    "notRunning": "未运行",
+    "startInstall": "开始安装",
+    "recheck": "重新检测",
+    "reinstall": "重新安装",
+    "installing": "安装中...",
+    "homebrew": {
+      "hint": "建议使用 Homebrew 安装 Docker",
+      "command": "运行命令: brew install --cask docker"
+    },
+    "image": {
+      "loading": "正在加载 Docker 镜像...",
+      "success": "镜像加载完成"
+    }
+  }
+}

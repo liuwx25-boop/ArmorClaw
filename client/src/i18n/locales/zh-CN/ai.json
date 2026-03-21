@@ -1,0 +1,110 @@
+{
+  "platformKeys": {
+    "title": "平台 Key 管理",
+    "subtitle": "管理ArmorClaw平台提供的 Token 套餐与消费、API Key 创建与配置、查看大模型价格",
+    "tabs": {
+      "packages": "Token套餐价格",
+      "billing": "Token消费",
+      "apiKeys": "配置 API Key"
+    }
+  },
+  "apiKeys": {
+    "title": "API Key 管理",
+    "subtitle": "配置模型",
+    "createBtn": "创建 API Key",
+    "creatingBtn": "创建中...",
+    "addBtn": "添加",
+    "securityNote": "API Key 是大模型 API 请求时的安全鉴权凭证，请妥善保管，不要泄露给他人。",
+    "newKeyNote": "新创建的 Key 默认为未激活状态，需在下方配置模型后才能使用。",
+    "table": {
+      "key": "API KEY",
+      "status": "状态",
+      "createdAt": "创建时间",
+      "actions": "操作"
+    },
+    "status": {
+      "active": "已激活",
+      "inactive": "未激活"
+    },
+    "actions": {
+      "view": "查看",
+      "delete": "删除"
+    },
+    "modal": {
+      "title": "API Key 明文",
+      "warning": "请妥善保管，关闭弹窗后不会再次显示。"
+    },
+    "select": {
+      "apiKey": "请选择 API Key",
+      "model": "请选择模型",
+      "selectModel": "选择模型",
+      "selectApiKey": "选择 API Key",
+      "inactive": "(未激活)"
+    },
+    "empty": {
+      "noKeys": "暂无 API Key，请先创建 API Key",
+      "noModels": "暂无可用模型，请联系管理员配置"
+    },
+    "loading": {
+      "default": "加载中...",
+      "config": "加载配置..."
+    },
+    "config": {
+      "title": "配置模型",
+      "success": "配置已保存"
+    }
+  },
+  "byok": {
+    "title": "自带 Key 配置",
+    "subtitle": "使用自己的 Coding Plan 或 API Key 直接调用大模型厂商",
+    "securityNote": "API Key 通过系统级加密存储保护，不会进入容器环境，确保密钥安全。",
+    "addBtn": "新增配置",
+    "tabs": {
+      "codingPlan": "Coding Plan",
+      "standard": "标准 API",
+      "other": "其他",
+      "custom": "自定义"
+    },
+    "form": {
+      "providerId": "厂商标识",
+      "providerIdPlaceholder": "输入唯一标识，如 my-provider",
+      "baseUrl": "Base URL",
+      "baseUrlPlaceholder": "输入厂商 API Base URL",
+      "apiKey": "API Key",
+      "apiKeyPlaceholder": "输入厂商 API Key",
+      "modelName": "模型名称",
+      "modelNamePlaceholder": "请输入模型名称，如 doubao-1.5-pro"
+    },
+    "buttons": {
+      "testConnection": "测试连接",
+      "testing": "测试中...",
+      "saveAndApply": "保存并应用",
+      "saving": "保存中..."
+    },
+    "list": {
+      "title": "已配置列表",
+      "empty": "暂无自带 Key 配置"
+    },
+    "actions": {
+      "changeModel": "更换模型",
+      "setDefault": "设为默认",
+      "setting": "设置中...",
+      "delete": "删除"
+    },
+    "selectProvider": "选择厂商"
+  },
+  "modelConfig": {
+    "title": "大模型配置",
+    "subtitle": "给 ArmorClaw 配置大模型 API Key",
+    "addBtn": "新增模型",
+    "selectModel": "模型",
+    "apiKeyPlaceholder": "输入大模型 API Key",
+    "apiKeyNote": "请输入大模型服务商提供的 API Key，用于调用对应的模型。",
+    "addBtnShort": "添加",
+    "saving": "保存中...",
+    "loading": "加载配置...",
+    "configured": "已配置模型",
+    "configuredBadge": "已配置",
+    "error": "无法获取本地代理地址"
+  }
+}

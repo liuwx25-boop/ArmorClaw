@@ -1,0 +1,110 @@
+{
+  "platformKeys": {
+    "title": "Platform Key Management",
+    "subtitle": "Manage Token packages, API Keys, and view model pricing",
+    "tabs": {
+      "packages": "Token Packages",
+      "billing": "Token Usage",
+      "apiKeys": "API Keys"
+    }
+  },
+  "apiKeys": {
+    "title": "API Key Management",
+    "subtitle": "Configure Models",
+    "createBtn": "Create API Key",
+    "creatingBtn": "Creating...",
+    "addBtn": "Add",
+    "securityNote": "API Keys are used for authentication. Keep them secure and do not share.",
+    "newKeyNote": "New keys are inactive by default. Configure models below to activate.",
+    "table": {
+      "key": "API KEY",
+      "status": "Status",
+      "createdAt": "Created At",
+      "actions": "Actions"
+    },
+    "status": {
+      "active": "Active",
+      "inactive": "Inactive"
+    },
+    "actions": {
+      "view": "View",
+      "delete": "Delete"
+    },
+    "modal": {
+      "title": "API Key",
+      "warning": "Save this key securely. It won't be shown again."
+    },
+    "select": {
+      "apiKey": "Select API Key",
+      "model": "Select Model",
+      "selectModel": "Select Model",
+      "selectApiKey": "Select API Key",
+      "inactive": "(Inactive)"
+    },
+    "empty": {
+      "noKeys": "No API Keys. Create one to get started.",
+      "noModels": "No models available. Contact admin to configure."
+    },
+    "loading": {
+      "default": "Loading...",
+      "config": "Loading configuration..."
+    },
+    "config": {
+      "title": "Configure Models",
+      "success": "Configuration saved"
+    }
+  },
+  "byok": {
+    "title": "Bring Your Own Key",
+    "subtitle": "Use your own API keys to call AI providers directly",
+    "securityNote": "API Keys are encrypted and stored securely. They never enter the container environment.",
+    "addBtn": "Add Configuration",
+    "tabs": {
+      "codingPlan": "Coding Plan",
+      "standard": "Standard API",
+      "other": "Other",
+      "custom": "Custom"
+    },
+    "form": {
+      "providerId": "Provider ID",
+      "providerIdPlaceholder": "Enter unique ID, e.g., my-provider",
+      "baseUrl": "Base URL",
+      "baseUrlPlaceholder": "Enter provider API Base URL",
+      "apiKey": "API Key",
+      "apiKeyPlaceholder": "Enter provider API Key",
+      "modelName": "Model Name",
+      "modelNamePlaceholder": "Enter model name, e.g., gpt-4"
+    },
+    "buttons": {
+      "testConnection": "Test Connection",
+      "testing": "Testing...",
+      "saveAndApply": "Save & Apply",
+      "saving": "Saving..."
+    },
+    "list": {
+      "title": "Configured Providers",
+      "empty": "No custom API keys configured"
+    },
+    "actions": {
+      "changeModel": "Change Model",
+      "setDefault": "Set Default",
+      "setting": "Setting...",
+      "delete": "Delete"
+    },
+    "selectProvider": "Select Provider"
+  },
+  "modelConfig": {
+    "title": "Model Configuration",
+    "subtitle": "Configure AI model API keys for ArmorClaw",
+    "addBtn": "Add Model",
+    "selectModel": "Model",
+    "apiKeyPlaceholder": "Enter API Key",
+    "apiKeyNote": "Enter the API key from your AI provider.",
+    "addBtnShort": "Add",
+    "saving": "Saving...",
+    "loading": "Loading configuration...",
+    "configured": "Configured Models",
+    "configuredBadge": "Configured",
+    "error": "Unable to get local proxy address"
+  }
+}

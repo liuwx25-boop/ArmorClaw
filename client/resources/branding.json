@@ -1,0 +1,10 @@
+{
+  "appName": "ArmorClaw",
+  "appId": "com.armorclaw.client",
+  "icons": {
+    "mac": "icons/icon.icns",
+    "win": "icons/icon.ico",
+    "linux": "icons/icon.png"
+  },
+  "logo": "icons/logo.jpg"
+}

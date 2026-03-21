@@ -1,0 +1,536 @@
+# ============================================================
+# ArmorClaw Client - Auto Build & Release Pipeline
+# ============================================================
+# Trigger: push a tag starting with "v" (e.g. v1.0.0)
+# Pipeline:
+#   1. Build Docker image on Linux (Docker-friendly)
+#   2. Package Electron installers on each target OS
+#   3. Create GitHub Release and upload all artifacts
+#
+# Usage:
+#   git tag v1.0.0
+#   git push origin v1.0.0
+#
+# Manual trigger (for debugging):
+#   Actions → Build & Release → Run workflow
+# ============================================================
+
+name: Build & Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      build_mac_arm64:
+        description: 'Build macOS ARM64'
+        type: boolean
+        default: true
+      build_mac_x64:
+        description: 'Build macOS x64'
+        type: boolean
+        default: true
+      build_win_x64:
+        description: 'Build Windows x64'
+        type: boolean
+        default: true
+      build_linux_x64:
+        description: 'Build Linux x64'
+        type: boolean
+        default: true
+
+permissions:
+  contents: write
+
+# Cancel in-progress runs for the same ref
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  NODE_VERSION: '20'
+  OPENCLAW_VERSION: 'v2026.2.25'
+
+jobs:
+  # ============================================================
+  # Job 1: Build Docker image (Linux, Docker-native)
+  # ============================================================
+  # Docker image is built once per architecture, then shared
+  # with Electron packaging jobs via artifacts.
+  # ============================================================
+  build-image:
+    name: "Docker Image (${{ matrix.arch }})"
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - arch: arm64
+            docker_platform: linux/arm64
+          - arch: x64
+            docker_platform: linux/amd64
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up QEMU (for cross-arch build)
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      # ---- Clone OpenClaw source ----
+      - name: Clone OpenClaw source
+        run: |
+          REPO="https://github.com/openclaw/openclaw.git"
+          VERSION="${{ env.OPENCLAW_VERSION }}"
+          echo "Cloning OpenClaw $VERSION ..."
+          git clone --depth 1 --branch "$VERSION" "$REPO" openclaw-src || \
+          git clone --depth 1 "$REPO" openclaw-src
+          echo "OpenClaw source ready"
+
+      # ---- Build base image ----
+      - name: Build base image
+        run: |
+          cd openclaw-src
+
+          # Patch upstream Dockerfile
+          cp Dockerfile .Dockerfile.patched
+          sed -i '/^# syntax=docker\/dockerfile/d' .Dockerfile.patched
+          sed -i 's/@sha256:[a-f0-9]\{64\}//' .Dockerfile.patched
+
+          # Pre-create A2UI stub bundle in Docker context BEFORE build.
+          rm -rf vendor/a2ui apps/shared/OpenClawKit/Tools/CanvasA2UI
+          mkdir -p src/canvas-host/a2ui
+          echo "/* A2UI bundle unavailable - stub for CI build */" > src/canvas-host/a2ui/a2ui.bundle.js
+          echo "stub" > src/canvas-host/a2ui/.bundle.hash
+          echo "A2UI stub bundle created in Docker context"
+
+          # Build base image and export as OCI layout directory.
+          # docker-container driver (needed for cross-arch QEMU builds) stores
+          # images in its own isolated cache — a tagged image from step 1 is NOT
+          # visible to step 2's FROM instruction. Exporting as OCI layout and
+          # referencing via --build-context in step 2 avoids this issue.
+          docker buildx build \
+            --platform ${{ matrix.docker_platform }} \
+            --build-arg GO_VERSION=1.23.6 \
+            -f .Dockerfile.patched \
+            --output type=oci,dest=/tmp/openclaw-base-oci.tar \
+            .
+
+          # Extract OCI tar to a layout directory for --build-context oci-layout://
+          mkdir -p /tmp/openclaw-base-oci
+          tar -xf /tmp/openclaw-base-oci.tar -C /tmp/openclaw-base-oci
+          rm -f /tmp/openclaw-base-oci.tar
+
+          echo "Base image built and exported as OCI layout"
+          ls -la /tmp/openclaw-base-oci/
+
+      # ---- Build full image ----
+      - name: Build full image
+        run: |
+          # Resolve the digest of the base image from OCI layout index.
+          # The OCI layout has an index.json with the manifest digest.
+          BASE_DIGEST=$(cat /tmp/openclaw-base-oci/index.json | python3 -c "
+          import json, sys
+          idx = json.load(sys.stdin)
+          print(idx['manifests'][0]['digest'])
+          ")
+          echo "Base image digest: $BASE_DIGEST"
+
+          # Reference base image via OCI layout directory + digest.
+          # In Dockerfile.full, FROM ${BASE_IMAGE} resolves to FROM openclaw-base,
+          # and --build-context maps openclaw-base to the OCI layout.
+          docker buildx build \
+            --platform ${{ matrix.docker_platform }} \
+            --build-arg BASE_IMAGE=openclaw-base \
+            --build-arg GOPROXY=https://proxy.golang.org,direct \
+            --build-arg NPM_REGISTRY=https://registry.npmjs.org \
+            --build-arg PIP_INDEX=https://pypi.org/simple \
+            --build-context "openclaw-base=oci-layout:///tmp/openclaw-base-oci@${BASE_DIGEST}" \
+            -t armorclaw:full \
+            -f image-builder/github-builder/Dockerfile.full \
+            --output type=docker,dest=armorclaw-${{ matrix.arch }}.tar \
+            image-builder/github-builder/
+
+          echo "Full image built and exported"
+          ls -lh armorclaw-${{ matrix.arch }}.tar
+
+      # ---- Export as tar.gz ----
+      - name: Export image
+        run: |
+          echo "Compressing armorclaw-${{ matrix.arch }}.tar to .tar.gz ..."
+          gzip armorclaw-${{ matrix.arch }}.tar
+          ls -lh armorclaw-${{ matrix.arch }}.tar.gz
+
+      # ---- Upload artifact ----
+      - name: Upload image artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: docker-image-${{ matrix.arch }}
+          path: armorclaw-${{ matrix.arch }}.tar.gz
+          retention-days: 1
+          compression-level: 0    # Already gzipped
+
+  # ============================================================
+  # Job 2: Package macOS ARM64 installer
+  # ============================================================
+  package-mac-arm64:
+    name: "macOS ARM64 (.dmg)"
+    needs: build-image
+    if: ${{ !inputs.build_mac_arm64 || inputs.build_mac_arm64 == true }}
+    runs-on: macos-latest    # Apple Silicon
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Download Docker image
+        uses: actions/download-artifact@v4
+        with:
+          name: docker-image-arm64
+          path: client/resources/
+
+      - name: Verify image file
+        run: ls -lh client/resources/armorclaw-arm64.tar.gz
+
+      - name: Install dependencies
+        working-directory: client
+        run: |
+          npm install
+          npm rebuild
+
+      - name: TypeScript check
+        working-directory: client
+        run: npx tsc --noEmit
+
+      - name: Vite build
+        working-directory: client
+        run: npx vite build
+
+      - name: Rebuild native modules
+        working-directory: client
+        run: npx @electron/rebuild
+
+      - name: Package DMG
+        working-directory: client
+        run: npx electron-builder --mac dmg --arm64 -c.mac.identity=null
+
+      - name: Rename with version
+        working-directory: client/SoftwarePackage
+        run: |
+          VERSION="${GITHUB_REF_NAME:-dev}"
+          for f in *.dmg; do
+            [ -f "$f" ] || continue
+            NEW="ArmorClaw-${VERSION}-mac-arm64.dmg"
+            mv "$f" "$NEW"
+            echo "Renamed: $f → $NEW"
+          done
+          rm -f *.blockmap
+          ls -lh *.dmg
+
+      - name: Upload installer
+        uses: actions/upload-artifact@v4
+        with:
+          name: installer-mac-arm64
+          path: client/SoftwarePackage/*.dmg
+          retention-days: 3
+
+  # ============================================================
+  # Job 3: Package macOS x64 installer
+  # ============================================================
+  package-mac-x64:
+    name: "macOS x64 (.dmg)"
+    needs: build-image
+    if: ${{ !inputs.build_mac_x64 || inputs.build_mac_x64 == true }}
+    runs-on: macos-13    # Intel Mac
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Download Docker image
+        uses: actions/download-artifact@v4
+        with:
+          name: docker-image-x64
+          path: client/resources/
+
+      - name: Verify image file
+        run: ls -lh client/resources/armorclaw-x64.tar.gz
+
+      - name: Install dependencies
+        working-directory: client
+        run: |
+          npm install
+          npm rebuild
+
+      - name: TypeScript check
+        working-directory: client
+        run: npx tsc --noEmit
+
+      - name: Vite build
+        working-directory: client
+        run: npx vite build
+
+      - name: Rebuild native modules
+        working-directory: client
+        run: npx @electron/rebuild
+
+      - name: Package DMG
+        working-directory: client
+        run: npx electron-builder --mac dmg --x64 -c.mac.identity=null
+
+      - name: Rename with version
+        working-directory: client/SoftwarePackage
+        run: |
+          VERSION="${GITHUB_REF_NAME:-dev}"
+          for f in *.dmg; do
+            [ -f "$f" ] || continue
+            NEW="ArmorClaw-${VERSION}-mac-x64.dmg"
+            mv "$f" "$NEW"
+            echo "Renamed: $f → $NEW"
+          done
+          rm -f *.blockmap
+          ls -lh *.dmg
+
+      - name: Upload installer
+        uses: actions/upload-artifact@v4
+        with:
+          name: installer-mac-x64
+          path: client/SoftwarePackage/*.dmg
+          retention-days: 3
+
+  # ============================================================
+  # Job 4: Package Windows x64 installer
+  # ============================================================
+  package-win-x64:
+    name: "Windows x64 (.exe)"
+    needs: build-image
+    if: ${{ !inputs.build_win_x64 || inputs.build_win_x64 == true }}
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Download Docker image
+        uses: actions/download-artifact@v4
+        with:
+          name: docker-image-x64
+          path: client/resources/
+
+      - name: Verify image file
+        run: dir client\resources\armorclaw-x64.tar.gz
+
+      - name: Install dependencies
+        working-directory: client
+        run: |
+          npm install
+          npm rebuild
+
+      - name: TypeScript check
+        working-directory: client
+        run: npx tsc --noEmit
+
+      - name: Vite build
+        working-directory: client
+        run: npx vite build
+
+      - name: Rebuild native modules
+        working-directory: client
+        run: npx @electron/rebuild
+
+      - name: Package EXE
+        working-directory: client
+        run: npx electron-builder --win nsis --x64
+
+      - name: Rename with version
+        working-directory: client/SoftwarePackage
+        shell: bash
+        run: |
+          VERSION="${GITHUB_REF_NAME:-dev}"
+          for f in *.exe; do
+            [ -f "$f" ] || continue
+            NEW="ArmorClaw-${VERSION}-win-x64.exe"
+            mv "$f" "$NEW"
+            echo "Renamed: $f → $NEW"
+          done
+          rm -f *.blockmap
+          ls -lh *.exe
+
+      - name: Upload installer
+        uses: actions/upload-artifact@v4
+        with:
+          name: installer-win-x64
+          path: client/SoftwarePackage/*.exe
+          retention-days: 3
+
+  # ============================================================
+  # Job 5: Package Linux x64 installer
+  # ============================================================
+  package-linux-x64:
+    name: "Linux x64 (.AppImage/.deb)"
+    needs: build-image
+    if: ${{ !inputs.build_linux_x64 || inputs.build_linux_x64 == true }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Download Docker image
+        uses: actions/download-artifact@v4
+        with:
+          name: docker-image-x64
+          path: client/resources/
+
+      - name: Verify image file
+        run: ls -lh client/resources/armorclaw-x64.tar.gz
+
+      - name: Install dependencies
+        working-directory: client
+        run: |
+          npm install
+          npm rebuild
+
+      - name: TypeScript check
+        working-directory: client
+        run: npx tsc --noEmit
+
+      - name: Vite build
+        working-directory: client
+        run: npx vite build
+
+      - name: Rebuild native modules
+        working-directory: client
+        run: npx @electron/rebuild
+
+      - name: Package AppImage & deb
+        working-directory: client
+        run: npx electron-builder --linux AppImage deb --x64
+
+      - name: Rename with version
+        working-directory: client/SoftwarePackage
+        run: |
+          VERSION="${GITHUB_REF_NAME:-dev}"
+          for f in *.AppImage; do
+            [ -f "$f" ] || continue
+            NEW="ArmorClaw-${VERSION}-linux-x64.AppImage"
+            mv "$f" "$NEW"
+            echo "Renamed: $f → $NEW"
+          done
+          for f in *.deb; do
+            [ -f "$f" ] || continue
+            NEW="ArmorClaw-${VERSION}-linux-x64.deb"
+            mv "$f" "$NEW"
+            echo "Renamed: $f → $NEW"
+          done
+          ls -lh ArmorClaw-* 2>/dev/null || true
+
+      - name: Upload installer
+        uses: actions/upload-artifact@v4
+        with:
+          name: installer-linux-x64
+          path: |
+            client/SoftwarePackage/*.AppImage
+            client/SoftwarePackage/*.deb
+          retention-days: 3
+
+  # ============================================================
+  # Job 6: Create GitHub Release
+  # ============================================================
+  release:
+    name: "Create Release"
+    needs:
+      - package-mac-arm64
+      - package-mac-x64
+      - package-win-x64
+      - package-linux-x64
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0    # Full history for changelog
+
+      - name: Download all installers
+        uses: actions/download-artifact@v4
+        with:
+          pattern: installer-*
+          merge-multiple: true
+          path: dist/
+
+      - name: List release assets
+        run: |
+          echo "=== Release Assets ==="
+          ls -lh dist/
+          echo "======================"
+
+      - name: Generate changelog
+        id: changelog
+        run: |
+          # Get previous tag
+          PREV_TAG=$(git tag --sort=-v:refname | head -n 2 | tail -n 1)
+          CURRENT_TAG="${GITHUB_REF_NAME}"
+
+          echo "## What's Changed" > changelog.md
+          echo "" >> changelog.md
+
+          if [ -n "$PREV_TAG" ] && [ "$PREV_TAG" != "$CURRENT_TAG" ]; then
+            echo "Changes since $PREV_TAG:" >> changelog.md
+            echo "" >> changelog.md
+            git log --pretty=format:"- %s (%h)" "$PREV_TAG".."$CURRENT_TAG" >> changelog.md
+          else
+            echo "Initial release" >> changelog.md
+          fi
+
+          echo "" >> changelog.md
+          echo "---" >> changelog.md
+          echo "" >> changelog.md
+          echo "## Download" >> changelog.md
+          echo "" >> changelog.md
+          echo "| Platform | Architecture | File |" >> changelog.md
+          echo "|----------|-------------|------|" >> changelog.md
+          echo "| macOS | ARM64 (Apple Silicon) | \`ArmorClaw-${CURRENT_TAG}-mac-arm64.dmg\` |" >> changelog.md
+          echo "| macOS | x64 (Intel) | \`ArmorClaw-${CURRENT_TAG}-mac-x64.dmg\` |" >> changelog.md
+          echo "| Windows | x64 | \`ArmorClaw-${CURRENT_TAG}-win-x64.exe\` |" >> changelog.md
+          echo "| Linux | x64 | \`ArmorClaw-${CURRENT_TAG}-linux-x64.AppImage\` / \`.deb\` |" >> changelog.md
+
+          cat changelog.md
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/*
+          body_path: changelog.md
+          draft: false
+          prerelease: false
+          generate_release_notes: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # ============================================================
+      # COS 上传说明
+      # ============================================================
+      # 安装包上传到 COS 通过手动脚本完成（GitHub CI/CD Docker 构建暂不可用）
+      # 使用方式: ArmorClaw-Client/scripts/setup-cos.sh upload v1.0.0 ./dist/
+      # 配置文件: ArmorClaw-Client/scripts/cos.conf
+      # ============================================================

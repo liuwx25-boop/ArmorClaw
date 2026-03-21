@@ -1,0 +1,37 @@
+{
+  "groups": {
+    "ai": {
+      "label": "AI Models",
+      "platformKeys": "Platform Keys",
+      "byok": "Bring Your Own Key"
+    },
+    "im": {
+      "label": "IM Messaging"
+    },
+    "sessions": {
+      "label": "Sessions"
+    },
+    "skills": {
+      "label": "Skills"
+    },
+    "container": {
+      "label": "Container Resources"
+    },
+    "files": {
+      "label": "Files"
+    },
+    "terminal": {
+      "label": "Terminal"
+    }
+  },
+  "docs": "Documentation",
+  "logout": "Sign Out",
+  "serviceStatus": {
+    "running": "Service Running",
+    "stopped": "Service Stopped"
+  },
+  "actions": {
+    "stopService": "Stop Service",
+    "startService": "Start Service"
+  }
+}

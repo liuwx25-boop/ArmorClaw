@@ -1,0 +1,9 @@
+{
+  "title": "个人信息",
+  "fields": {
+    "userId": "用户 ID",
+    "pointsBalance": "积分余额",
+    "registeredAt": "注册时间"
+  },
+  "logout": "退出登录"
+}

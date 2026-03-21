@@ -1,0 +1,9 @@
+# 预安装二进制文件（通过 prepare-offline-bins.sh 生成）
+# 注意：这些文件需要提交到 git，以便跳板机能直接使用
+# 如果文件太大超出 Gitee 限制，可改用 Git LFS 或单独传输
+# gitee-builder/offline-bins/amd64/*
+# gitee-builder/offline-bins/arm64/*
+
+# 构建时克隆的 openclaw 源码
+gitee-builder/.openclaw-src/
+github-builder/.openclaw-src/

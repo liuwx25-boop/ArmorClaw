@@ -1,0 +1,215 @@
+# ============================================================
+# ArmorClaw Skill CLI Dependencies - 人工参考文档
+# ============================================================
+# 本文件是 Skill CLI 工具依赖的声明式清单，仅供人工参考。
+# 实际安装逻辑硬编码在 Dockerfile.full 中，本文件不会被自动解析。
+#
+# ⚠️ 同步维护提醒：
+#   新增/删除/修改工具时，需同时更新以下 3 个位置：
+#   1. Dockerfile.full — 实际安装指令
+#   2. build.sh — TOOLS 验证列表
+#   3. 本文件 — 保持参考文档与实际一致
+#
+# 类型说明：
+#   apt      - 通过 apt-get 安装的系统包
+#   npm      - 通过 npm install -g 安装的 Node CLI
+#   go       - 通过 go install 安装的 Go CLI
+#   uv       - 通过 uv tool install 安装的 Python 工具
+#   binary   - 从 GitHub Releases 下载的预编译二进制
+#   python   - 通过 pip3 install 安装的 Python 包
+#
+# 国内网络策略说明：
+#   china_mirror: true   — 国内有免费公开镜像源，构建时多源 fallback
+#   china_mirror: false  — 国内无镜像源，通过 offline-bins/ 预安装或 OSS 自建源站
+
+# --- APT 系统包 ---
+apt:
+  - name: 1password-cli
+    description: "1Password CLI (op)"
+    china_mirror: false
+    offline_strategy: "预下载 .deb 包到 offline-bins/，或从自建 OSS 下载"
+    custom_repo: true
+    repo_setup: |
+      curl -sS https://downloads.1password.com/linux/keys/1password.asc -o /tmp/1password.asc && \
+        ACTUAL_FP=$(gpg --with-colons --import-options show-only --import /tmp/1password.asc 2>/dev/null | awk -F: '/^fpr:/{print $10; exit}') && \
+        [ "$ACTUAL_FP" = "3FEF9748469ADBE15DA7CA80AC2D62742012EA22" ] || { echo "GPG key mismatch"; exit 1; } && \
+        gpg --dearmor < /tmp/1password.asc > /usr/share/keyrings/1password-archive-keyring.gpg && \
+      echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/1password-archive-keyring.gpg] https://downloads.1password.com/linux/debian/$(dpkg --print-architecture) stable main" \
+        > /etc/apt/sources.list.d/1password.list
+
+# --- Node CLI 工具 ---
+# 国内镜像源（多源 fallback）：
+#   1. https://registry.npmmirror.com    — 淘宝 npmmirror（推荐，同步最快）
+#   2. https://repo.huaweicloud.com/repository/npm/  — 华为云
+#   3. https://mirrors.cloud.tencent.com/npm/  — 腾讯云
+#   4. https://registry.npmjs.org        — 官方（需外网）
+npm:
+  - package: "@anthropic-ai/claude-code"
+    description: "Anthropic Claude Code CLI"
+    china_mirror: true
+  - package: obsidian-cli
+    description: "Obsidian vault management CLI"
+    china_mirror: true
+  - package: clawhub
+    description: "ClawHub CLI"
+    china_mirror: true
+  - package: mcporter
+    description: "MCP tool porter"
+    china_mirror: true
+  - package: "@steipete/summarize"
+    description: "Text summarization CLI"
+    china_mirror: true
+  - package: "@steipete/oracle"
+    description: "Oracle CLI"
+    china_mirror: true
+  - package: gog
+    description: "GOG game/utility CLI"
+    china_mirror: true
+  - package: "@google/gemini-cli"
+    description: "Google Gemini CLI"
+    china_mirror: true
+
+# --- Go CLI 工具 ---
+# 国内镜像源（多源 fallback，通过 GOPROXY 环境变量配置）：
+#   1. https://goproxy.cn       — 七牛（推荐）
+#   2. https://goproxy.io       — 独立社区
+#   3. https://mirrors.aliyun.com/goproxy/  — 阿里云
+#   4. direct                   — 直连 GitHub（需外网）
+go:
+  - module: "github.com/steipete/blucli/cmd/blu"
+    bin: blu
+    description: "Bluetooth CLI"
+    china_mirror: true
+  - module: "github.com/steipete/camsnap/cmd/camsnap"
+    bin: camsnap
+    description: "Camera snapshot CLI"
+    china_mirror: true
+  - module: "github.com/steipete/eightctl/cmd/eightctl"
+    bin: eightctl
+    description: "EightSleep CLI"
+    china_mirror: true
+  - module: "github.com/steipete/goplaces/cmd/goplaces"
+    bin: goplaces
+    description: "Google Places CLI"
+    china_mirror: true
+  - module: "github.com/steipete/ordercli/cmd/ordercli"
+    bin: ordercli
+    description: "Order management CLI"
+    china_mirror: true
+  - module: "github.com/steipete/sonoscli/cmd/sonos"
+    bin: sonos
+    description: "Sonos speaker CLI"
+    china_mirror: true
+  - module: "github.com/steipete/songsee/cmd/songsee"
+    bin: songsee
+    description: "Song recognition CLI"
+    china_mirror: true
+  - module: "github.com/steipete/wacli/cmd/wacli"
+    bin: wacli
+    description: "WhatsApp CLI"
+    china_mirror: true
+  - module: "github.com/Hyaxia/blogwatcher/cmd/blogwatcher"
+    bin: blogwatcher
+    description: "Blog watcher CLI"
+    china_mirror: true
+
+# --- uv Python 工具 ---
+uv:
+  - package: nano-pdf
+    description: "Lightweight PDF processing tool"
+    china_mirror: true
+    post_install: |
+      cp "$(readlink -f /root/.local/bin/nano-pdf)" /usr/local/bin/nano-pdf && \
+      chmod 755 /usr/local/bin/nano-pdf
+
+# --- 预编译二进制下载 ---
+# 国内无公开镜像源，通过 offline-bins/ 预安装或自建 OSS 源站分发
+binary:
+  - name: himalaya
+    description: "Email client CLI"
+    version: "v1.1.0"
+    china_mirror: false
+    offline_strategy: "预下载二进制到 offline-bins/，或从自建 OSS 下载"
+    url_template: "https://github.com/pimalaya/himalaya/releases/download/{version}/himalaya.{arch}-linux.tgz"
+    arch_map:
+      aarch64: aarch64
+      x86_64: x86_64
+    extract: tar
+    bin_path: himalaya
+
+  - name: openhue
+    description: "Philips Hue CLI"
+    version: "0.23"
+    china_mirror: false
+    offline_strategy: "预下载二进制到 offline-bins/，或从自建 OSS 下载"
+    url_template: "https://github.com/openhue/openhue-cli/releases/download/{version}/openhue_Linux_{arch}.tar.gz"
+    arch_map:
+      aarch64: arm64
+      x86_64: x86_64
+    extract: tar
+    bin_path: openhue
+
+# --- Python pip 包 ---
+# 国内镜像源（多源 fallback）：
+#   1. https://pypi.tuna.tsinghua.edu.cn/simple  — 清华（推荐）
+#   2. https://mirrors.aliyun.com/pypi/simple/    — 阿里云
+#   3. https://repo.huaweicloud.com/repository/pypi/simple  — 华为云
+#   4. https://pypi.org/simple                    — 官方（需外网）
+python:
+  - package: openai-whisper
+    description: "OpenAI Whisper speech-to-text (含 PyTorch，约 2-3GB)"
+    china_mirror: true
+
+# --- Bun 运行时（base 镜像依赖）---
+# base 镜像的 Dockerfile 中通过 curl https://bun.sh/install 安装
+# 国内无公开镜像源，通过 offline-bins/ 预安装
+runtime:
+  - name: bun
+    description: "Bun JavaScript runtime (base 镜像构建依赖)"
+    china_mirror: false
+    offline_strategy: "预下载二进制到 offline-bins/，构建 base 镜像时注入"
+
+# --- macOS 专属工具（不纳入 Docker 镜像）---
+# 以下工具仅通过 brew tap 安装且依赖 macOS API/UI 框架，
+# 在 Linux Docker 容器中无法运行，仅记录供参考。
+darwin_only:
+  - bin: remindctl
+    skill: apple-reminders
+    brew: "steipete/tap/remindctl"
+    reason: "依赖 macOS Reminders.framework"
+  - bin: memo
+    skill: apple-notes
+    brew: "antoniorodr/memo/memo"
+    reason: "依赖 macOS Notes.app AppleScript"
+  - bin: imsg
+    skill: imsg
+    brew: "steipete/tap/imsg"
+    reason: "依赖 macOS Messages.framework"
+  - bin: peekaboo
+    skill: peekaboo
+    brew: "steipete/tap/peekaboo"
+    reason: "依赖 macOS 屏幕捕获 API"
+  - bin: codexbar
+    skill: model-usage
+    brew: "steipete/tap/codexbar"
+    reason: "brew cask，macOS GUI 应用"
+  - bin: spogo
+    skill: spotify-player
+    brew: "steipete/tap/spogo"
+    reason: "仅提供 brew tap 安装方式"
+  - bin: sag
+    skill: sag
+    brew: "steipete/tap/sag"
+    reason: "仅提供 brew tap 安装方式（npm 上的 sag 包非同一工具）"
+  - bin: gifgrep
+    skill: gifgrep
+    go_module: "github.com/steipete/gifgrep/cmd/gifgrep"
+    reason: "Go 模块在 Linux 上编译失败（依赖 macOS 框架）"
+  - bin: grizzly
+    skill: bear-notes
+    go_module: "github.com/tylerwince/grizzly/cmd/grizzly"
+    reason: "Bear Notes CLI，依赖 macOS SQLite 数据库路径"
+  - bin: things
+    skill: things
+    go_module: "github.com/ossianhempel/things3-cli/cmd/things"
+    reason: "Things 3 CLI，依赖 macOS Things.app 数据库"

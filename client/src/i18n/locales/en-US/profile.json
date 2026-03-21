@@ -1,0 +1,9 @@
+{
+  "title": "Profile",
+  "fields": {
+    "userId": "User ID",
+    "pointsBalance": "Points Balance",
+    "registeredAt": "Registered At"
+  },
+  "logout": "Sign Out"
+}

@@ -1,0 +1,71 @@
+{
+  "title": "积分商店",
+  "subtitle": "选择适合您的积分套餐，用于 AI 大模型调用",
+  "discount": "赠送 {{percent}}%",
+  "validity": "有效期：{{period}}",
+  "points": "{{count}} 积分",
+  "buy": "购买",
+  "loading": "加载套餐...",
+  "error": "获取套餐列表失败",
+  "payment": {
+    "selectMethod": "选择支付方式",
+    "wechat": "微信支付",
+    "alipay": "支付宝",
+    "creating": "创建订单中...",
+    "qrcode": {
+      "title": "扫码支付",
+      "amount": "支付金额",
+      "remaining": "剩余时间",
+      "waiting": "等待支付...",
+      "claimedPaid": "已通知管理员，等待确认中...",
+      "iHavePaid": "我已支付",
+      "scanWith": "请使用{{app}}扫一扫完成支付"
+    },
+    "result": {
+      "success": "支付成功",
+      "successDesc": "积分已到账，可前往消费统计查看。",
+      "expired": "订单已过期",
+      "expiredDesc": "支付超时，请重新下单。"
+    },
+    "cancel": "取消支付"
+  },
+  "pricing": {
+    "title": "大模型价格",
+    "subtitle": "以下为不同大模型的使用价格。",
+    "loading": "加载价格数据...",
+    "tabs": {
+      "llm": "文本模型",
+      "image_gen": "生图模型",
+      "video_gen": "生视频模型"
+    },
+    "table": {
+      "modelName": "模型名称",
+      "contextLength": "上下文长度",
+      "contextLengthUnit": "千tokens",
+      "inputPrice": "输入单价",
+      "outputPrice": "输出单价",
+      "cachedPrice": "缓存命中",
+      "cacheStorage": "缓存存储",
+      "priceUnit": "积分/千tokens",
+      "cacheStorageUnit": "积分/千tokens/小时"
+    },
+    "billingMode": {
+      "token": "按 Token 计费",
+      "dimension": "按维度计费"
+    },
+    "imageTable": {
+      "resolution": "分辨率",
+      "pricePerImage": "积分/张",
+      "anyResolution": "不区分分辨率"
+    },
+    "videoTable": {
+      "resolution": "分辨率",
+      "maxDuration": "最大时长",
+      "audio": "音频",
+      "customVoice": "指定音色",
+      "pricePerSecond": "积分/秒"
+    },
+    "noPrice": "未配置价格",
+    "noModels": "该分类暂无模型"
+  }
+}

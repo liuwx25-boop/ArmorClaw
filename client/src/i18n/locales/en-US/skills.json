@@ -1,0 +1,150 @@
+{
+  "title": "Skill Management",
+  "subtitle": "Manage ArmorClaw skill plugins, enable or disable capabilities",
+  "tabs": {
+    "builtin": "Built-in Skills",
+    "custom": "Custom Skills"
+  },
+  "categories": {
+    "available": "Available",
+    "needsApiKey": "Needs API Key",
+    "needsDeps": "Needs Dependencies",
+    "needsConfig": "Needs Configuration",
+    "macosOnly": "macOS Only"
+  },
+  "status": {
+    "needsApiKey": "Needs API Key",
+    "missingDeps": "Missing dependencies",
+    "needsConfig": "Needs configuration",
+    "macosOnly": "macOS Only"
+  },
+  "custom": {
+    "import": "Import Custom Skill",
+    "importFromFolder": "Import from Folder",
+    "importing": "Importing...",
+    "importFailed": "Import failed",
+    "importHint": "Import a single SKILL.md file or a complete folder containing SKILL.md. OpenClaw will automatically recognize new skills.",
+    "empty": "No custom skills",
+    "emptyHint": "Click the button above to import your SKILL.md file",
+    "hasAttachments": "Has attachments",
+    "noDescription": "No description",
+    "desktopOnly": "Custom skill management is only available in the desktop client",
+    "loading": "Loading custom skills...",
+    "preview": "Preview",
+    "collapse": "Collapse",
+    "delete": "Delete",
+    "deleting": "Deleting...",
+    "previewError": "Unable to read file content"
+  },
+  "actions": {
+    "preview": "Preview",
+    "collapse": "Collapse",
+    "delete": "Delete",
+    "refresh": "Refresh",
+    "retry": "Retry",
+    "copy": "Copy"
+  },
+  "config": {
+    "needsCredentials": "Needs credentials:",
+    "save": "Save",
+    "saving": "Saving...",
+    "saved": "Saved",
+    "saveFailed": "Save failed",
+    "apiKey": "API Key",
+    "getApiKey": "Get API Key from:",
+    "envHint": "Value for environment variable {{name}}",
+    "enterEnv": "Enter {{name}}",
+    "configSteps": "Configuration steps:",
+    "step1": "Open terminal and enter the container",
+    "step2": "Copy the command below and paste it into the terminal (modify values first)",
+    "step3": "After saving, restart Gateway or refresh this page",
+    "writeCommand": "Execute the following command in terminal to write config (modify placeholder values):",
+    "configExample": "Configuration example (openclaw.json):",
+    "overwriteWarning": "⚠️ Note: This command will overwrite existing openclaw.json. To merge with existing config, first use",
+    "viewExisting": "to view current content"
+  },
+  "install": {
+    "installMethod": "Installation method:",
+    "oneClick": "One-click install: {{label}}",
+    "installing": "Installing...",
+    "success": "Installation successful",
+    "failed": "Installation failed: {{error}}",
+    "providesCommands": "(Provides commands: {{bins}})",
+    "openTerminal": "Open terminal to configure",
+    "manualInstall": "Open terminal for manual install",
+    "manualInstallHint": "The above tools need to be manually installed in the container before using this Skill.",
+    "afterInstall": "Please open terminal and execute the above command, then retry one-click install.",
+    "afterSteps": "Please open terminal and follow the steps above, then refresh the page."
+  },
+  "remediation": {
+    "aptNotFound": "Neither apt nor npm can automatically install \"{{pkg}}\". Please refer to the official documentation below to install manually in terminal:",
+    "brewNotSupported": "Homebrew (brew) is not applicable to the current container environment. It is recommended to manually install this tool via:",
+    "pipNotFound": "pip is not installed in the container. Please switch to root in terminal and execute the following command:",
+    "goNotFound": "Go toolchain is not installed in the container. Please execute the following command as root in terminal to install:",
+    "npmNotFound": "npm is not found in the container. Please switch to root in terminal and execute the following command:",
+    "stepOpenTerminal": "1. Open terminal and enter the container",
+    "stepOpenTerminalRoot": "1. Open terminal and enter the container (as root: su -)",
+    "stepFindInstall": "2. Refer to the official link below to find the Linux/Debian installation method",
+    "stepFindInstallApt": "2. Refer to the official link below to find the Linux/Debian installation method (usually apt or direct binary download)",
+    "stepRefresh": "3. After installation, return to this page and refresh"
+  },
+  "info": {
+    "website": "Website:",
+    "docs": "Documentation:",
+    "visitWebsite": "Visit website"
+  },
+  "loading": "Loading skills...",
+  "empty": "No skills available",
+  "error": {
+    "missingBins": "Missing commands: {{bins}}",
+    "missingAnyBins": "Missing commands (any of): {{bins}}",
+    "missingEnv": "Missing environment variables: {{env}}",
+    "missingConfig": "Missing configuration: {{config}}",
+    "fetchFailed": "Failed to fetch skill list",
+    "fetchCustomFailed": "Failed to fetch custom skill list",
+    "importFailed": "Import failed",
+    "removeFailed": "Delete failed",
+    "updateFailed": "Failed to update skill status"
+  },
+  "macosOnly": {
+    "message": "This Skill only supports macOS ({{os}}). The current Linux container environment is not compatible."
+  },
+  "configGuides": {
+    "bluebubbles": {
+      "description": "BlueBubbles (iMessage) integration configuration",
+      "fields": {
+        "serverUrl": "serverUrl - BlueBubbles server address",
+        "password": "password - API password",
+        "webhookPath": "webhookPath - Webhook path"
+      }
+    },
+    "telegram": {
+      "description": "Telegram Bot integration configuration",
+      "fields": {
+        "token": "token - Bot Token (get from @BotFather)"
+      }
+    },
+    "discord": {
+      "description": "Discord Bot integration configuration",
+      "fields": {
+        "token": "token - Bot Token (get from Discord Developer Portal)"
+      }
+    },
+    "slack": {
+      "description": "Slack Bot integration configuration",
+      "fields": {
+        "botToken": "botToken - Bot Token (xoxb-...)",
+        "appToken": "appToken - App Token (xapp-...)"
+      }
+    },
+    "voiceCall": {
+      "description": "Voice Call plugin configuration",
+      "fields": {
+        "enabled": "enabled - Enable (true)",
+        "provider": "config.provider - Provider: \"twilio\" / \"telnyx\" / \"plivo\" / \"mock\"",
+        "fromNumber": "config.fromNumber - Caller number"
+      }
+    }
+  },
+  "genericConfig": "Need to configure \"{{path}}\" in openclaw.json"
+}

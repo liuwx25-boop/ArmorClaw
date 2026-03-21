@@ -1,0 +1,13 @@
+{
+  "ready": "ArmorClaw Ready",
+  "containerStatus": "Container Status:",
+  "status": {
+    "running": "🟢 Running",
+    "stopped": "🔴 Stopped"
+  },
+  "actions": {
+    "stop": "Stop Service",
+    "start": "Start Service"
+  },
+  "serviceUrl": "Service URL:"
+}

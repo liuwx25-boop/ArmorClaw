@@ -1,0 +1,9 @@
+{
+  "title": "容器终端",
+  "header": "armorclaw:/bin/bash",
+  "notAvailable": "终端仅在 Electron 环境中可用",
+  "containerNotRunning": "容器未运行",
+  "startContainerHint": "请先启动 ArmorClaw 容器后使用终端",
+  "exited": "进程已退出（代码：{{code}}）",
+  "reconnect": "重新连接"
+}

@@ -1,0 +1,20 @@
+{
+  "title": "Files",
+  "subtitle": "Browse AI-generated code, documents, and media files. Download to local.",
+  "root": "Root",
+  "openInSystem": "Open in System",
+  "table": {
+    "name": "Name",
+    "size": "Size",
+    "modifiedAt": "Modified",
+    "actions": "Actions"
+  },
+  "actions": {
+    "download": "Download",
+    "open": "Open"
+  },
+  "loading": "Loading...",
+  "empty": "This directory is empty",
+  "path": "File storage path:",
+  "hint": "Code files in workspace directory, media files in media directory"
+}

@@ -1,0 +1,20 @@
+{
+  "title": "文件目录",
+  "subtitle": "浏览 AI 生成的代码、文档、媒体等文件，支持下载到本地",
+  "root": "根目录",
+  "openInSystem": "在系统中打开",
+  "table": {
+    "name": "名称",
+    "size": "大小",
+    "modifiedAt": "修改时间",
+    "actions": "操作"
+  },
+  "actions": {
+    "download": "下载",
+    "open": "打开"
+  },
+  "loading": "加载中...",
+  "empty": "此目录为空",
+  "path": "文件存储路径：",
+  "hint": "代码文件在 workspace 目录中，媒体文件在 media 目录中"
+}

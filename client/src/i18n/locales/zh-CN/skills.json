@@ -1,0 +1,150 @@
+{
+  "title": "Skill 管理",
+  "subtitle": "管理 ArmorClaw 的技能插件，启用或禁用各项能力",
+  "tabs": {
+    "builtin": "内置技能",
+    "custom": "自定义技能"
+  },
+  "categories": {
+    "available": "可用",
+    "needsApiKey": "需配置 API Key",
+    "needsDeps": "需安装依赖",
+    "needsConfig": "需要配置",
+    "macosOnly": "仅限 macOS"
+  },
+  "status": {
+    "needsApiKey": "需配置 API Key",
+    "missingDeps": "缺少依赖工具",
+    "needsConfig": "需要配置",
+    "macosOnly": "仅限 macOS"
+  },
+  "custom": {
+    "import": "导入自定义技能",
+    "importFromFolder": "从文件夹导入",
+    "importing": "导入中...",
+    "importFailed": "导入失败",
+    "importHint": "支持导入单个 SKILL.md 文件或包含 SKILL.md 的完整文件夹。导入后 OpenClaw 会自动识别新技能。",
+    "empty": "暂无自定义技能",
+    "emptyHint": "点击上方按钮导入你的 SKILL.md 文件",
+    "hasAttachments": "含附加文件",
+    "noDescription": "无描述",
+    "desktopOnly": "自定义技能管理仅在桌面客户端中可用",
+    "loading": "加载自定义技能...",
+    "preview": "预览",
+    "collapse": "收起",
+    "delete": "删除",
+    "deleting": "删除中...",
+    "previewError": "无法读取文件内容"
+  },
+  "actions": {
+    "preview": "预览",
+    "collapse": "收起",
+    "delete": "删除",
+    "refresh": "刷新",
+    "retry": "重试",
+    "copy": "复制"
+  },
+  "config": {
+    "needsCredentials": "需要配置凭证:",
+    "save": "保存",
+    "saving": "保存中...",
+    "saved": "已保存",
+    "saveFailed": "保存失败",
+    "apiKey": "API Key",
+    "getApiKey": "前往官网获取 API Key:",
+    "envHint": "环境变量 {{name}} 的值",
+    "enterEnv": "输入 {{name}}",
+    "configSteps": "配置步骤:",
+    "step1": "打开终端，进入容器",
+    "step2": "复制下方命令粘贴到终端执行（请先修改为实际值）",
+    "step3": "保存后重启 Gateway 或刷新此页面",
+    "writeCommand": "在终端中执行以下命令写入配置（请修改占位值）:",
+    "configExample": "配置示例 (openclaw.json):",
+    "overwriteWarning": "⚠️ 注意: 此命令会覆盖已有的 openclaw.json。如需合并已有配置，请先用",
+    "viewExisting": "查看现有内容"
+  },
+  "install": {
+    "installMethod": "安装方式:",
+    "oneClick": "一键安装: {{label}}",
+    "installing": "安装中...",
+    "success": "安装成功",
+    "failed": "安装失败: {{error}}",
+    "providesCommands": "(提供命令: {{bins}})",
+    "openTerminal": "打开终端进行配置",
+    "manualInstall": "打开终端手动安装",
+    "manualInstallHint": "上述工具需要在容器内手动安装后才能使用此 Skill。",
+    "afterInstall": "请打开终端执行上述命令，完成后重新尝试一键安装。",
+    "afterSteps": "请打开终端按上述步骤操作，完成后刷新页面。"
+  },
+  "remediation": {
+    "aptNotFound": "apt 和 npm 均无法自动安装 \"{{pkg}}\"。请参考下方官网文档，在终端中手动安装:",
+    "brewNotSupported": "Homebrew (brew) 不适用于当前容器环境。建议通过以下方式手动安装此工具:",
+    "pipNotFound": "容器内未安装 pip。请先在终端中切换到 root 并执行以下命令:",
+    "goNotFound": "容器内未安装 Go 工具链。请在终端中以 root 身份执行以下命令安装:",
+    "npmNotFound": "容器内未找到 npm。请先在终端中切换到 root 并执行以下命令:",
+    "stepOpenTerminal": "1. 打开终端，进入容器",
+    "stepOpenTerminalRoot": "1. 打开终端，进入容器 (以 root 身份: su -)",
+    "stepFindInstall": "2. 参考下方官网链接，查找该工具的 Linux/Debian 安装方式",
+    "stepFindInstallApt": "2. 参考下方官网链接，查找该工具的 Linux/Debian 安装方式（通常是 apt 或直接下载二进制）",
+    "stepRefresh": "3. 安装完成后回到此页面刷新状态"
+  },
+  "info": {
+    "website": "官网:",
+    "docs": "官方文档:",
+    "visitWebsite": "访问官网"
+  },
+  "loading": "加载 Skill 列表...",
+  "empty": "暂无可用 Skill",
+  "error": {
+    "missingBins": "缺少命令: {{bins}}",
+    "missingAnyBins": "缺少命令 (任一): {{bins}}",
+    "missingEnv": "缺少环境变量: {{env}}",
+    "missingConfig": "缺少配置: {{config}}",
+    "fetchFailed": "获取 Skill 列表失败",
+    "fetchCustomFailed": "获取自定义技能列表失败",
+    "importFailed": "导入失败",
+    "removeFailed": "删除失败",
+    "updateFailed": "更新 Skill 状态失败"
+  },
+  "macosOnly": {
+    "message": "此 Skill 仅支持 macOS ({{os}}) 系统，当前 Linux 容器环境不兼容。"
+  },
+  "configGuides": {
+    "bluebubbles": {
+      "description": "BlueBubbles (iMessage) 集成配置",
+      "fields": {
+        "serverUrl": "serverUrl - BlueBubbles 服务地址",
+        "password": "password - API 密码",
+        "webhookPath": "webhookPath - Webhook 路径"
+      }
+    },
+    "telegram": {
+      "description": "Telegram Bot 集成配置",
+      "fields": {
+        "token": "token - Bot Token (从 @BotFather 获取)"
+      }
+    },
+    "discord": {
+      "description": "Discord Bot 集成配置",
+      "fields": {
+        "token": "token - Bot Token (从 Discord Developer Portal 获取)"
+      }
+    },
+    "slack": {
+      "description": "Slack Bot 集成配置",
+      "fields": {
+        "botToken": "botToken - Bot Token (xoxb-...)",
+        "appToken": "appToken - App Token (xapp-...)"
+      }
+    },
+    "voiceCall": {
+      "description": "Voice Call 语音通话插件配置",
+      "fields": {
+        "enabled": "enabled - 是否启用 (true)",
+        "provider": "config.provider - 服务商: \"twilio\" / \"telnyx\" / \"plivo\" / \"mock\"",
+        "fromNumber": "config.fromNumber - 发起呼叫的号码"
+      }
+    }
+  },
+  "genericConfig": "需要在 openclaw.json 中配置 \"{{path}}\""
+}

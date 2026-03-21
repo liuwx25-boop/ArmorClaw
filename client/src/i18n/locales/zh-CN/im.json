@@ -1,0 +1,69 @@
+{
+  "title": "IM 通信",
+  "subtitle": "配置第三方 IM 平台，在手机上与 AI 对话",
+  "configured": "已配置通道",
+  "addChannel": "新增通道",
+  "applyBtn": "应用",
+  "saving": "保存中...",
+  "status": {
+    "enabled": "已启用",
+    "disabled": "已停用"
+  },
+  "apiKeys": {
+    "actions": {
+      "delete": "删除"
+    },
+    "deleting": "删除中..."
+  },
+  "providers": {
+    "feishu": {
+      "label": "飞书",
+      "description": "飞书是字节跳动旗下的企业协作平台，支持机器人接入。",
+      "appId": "飞书应用的 App ID",
+      "appSecret": "飞书应用的 App Secret"
+    },
+    "dingtalk": {
+      "label": "钉钉",
+      "description": "钉钉是阿里巴巴旗下的企业协作平台，支持企业内部机器人。",
+      "appKey": "钉钉应用的 Client ID",
+      "appSecret": "钉钉应用的 Client Secret"
+    },
+    "qqbot": {
+      "label": "QQ",
+      "description": "QQ 机器人，支持 QQ 频道和 QQ 群消息接入。",
+      "appId": "QQ 机器人的 App ID",
+      "appSecret": "QQ 机器人的 App Secret"
+    },
+    "wecom": {
+      "label": "企业微信",
+      "description": "企业微信是腾讯旗下的企业通讯工具，支持应用机器人。",
+      "corpId": "企业微信的 Corp ID",
+      "agentId": "应用的 Agent ID",
+      "secret": "应用的 Secret"
+    },
+    "telegram": {
+      "label": "Telegram",
+      "description": "Telegram 是全球流行的即时通讯应用，支持 Bot API。"
+    },
+    "discord": {
+      "label": "Discord",
+      "description": "Discord 是游戏社区常用的语音和文字聊天平台。"
+    }
+  },
+  "config": {
+    "title": "通道配置",
+    "missing": "缺少配置项"
+  },
+  "pairing": {
+    "title": "用户配对",
+    "description": "配置 IM 通道后，用户首次与机器人对话会收到配对码，在此输入配对码完成绑定。",
+    "platform": "IM 平台",
+    "code": "配对码（Pairing Code）",
+    "codePlaceholder": "输入配对码，如 XHEWKYWS",
+    "approveBtn": "批准配对",
+    "approving": "配对中...",
+    "success": "配对成功",
+    "failed": "配对失败"
+  },
+  "retry": "重试"
+}

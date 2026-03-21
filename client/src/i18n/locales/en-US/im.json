@@ -1,0 +1,69 @@
+{
+  "title": "IM Messaging",
+  "subtitle": "Configure third-party IM platforms to chat with AI on mobile",
+  "configured": "Configured Channels",
+  "addChannel": "Add Channel",
+  "applyBtn": "Apply",
+  "saving": "Saving...",
+  "status": {
+    "enabled": "Enabled",
+    "disabled": "Disabled"
+  },
+  "apiKeys": {
+    "actions": {
+      "delete": "Delete"
+    },
+    "deleting": "Deleting..."
+  },
+  "providers": {
+    "feishu": {
+      "label": "Feishu",
+      "description": "Feishu is ByteDance's enterprise collaboration platform with bot support.",
+      "appId": "Feishu App ID",
+      "appSecret": "Feishu App Secret"
+    },
+    "dingtalk": {
+      "label": "DingTalk",
+      "description": "DingTalk is Alibaba's enterprise collaboration platform for internal bots.",
+      "appKey": "DingTalk Client ID",
+      "appSecret": "DingTalk Client Secret"
+    },
+    "qqbot": {
+      "label": "QQ",
+      "description": "QQ Bot supports QQ channels and group messaging.",
+      "appId": "QQ Bot App ID",
+      "appSecret": "QQ Bot App Secret"
+    },
+    "wecom": {
+      "label": "WeCom",
+      "description": "WeCom is Tencent's enterprise communication tool with app bots.",
+      "corpId": "WeCom Corp ID",
+      "agentId": "App Agent ID",
+      "secret": "App Secret"
+    },
+    "telegram": {
+      "label": "Telegram",
+      "description": "Telegram is a popular global messaging app with Bot API support."
+    },
+    "discord": {
+      "label": "Discord",
+      "description": "Discord is a voice and text chat platform popular in gaming communities."
+    }
+  },
+  "config": {
+    "title": "Channel Configuration",
+    "missing": "Missing configuration"
+  },
+  "pairing": {
+    "title": "User Pairing",
+    "description": "After configuring an IM channel, users will receive a pairing code on their first message. Enter the code here to complete binding.",
+    "platform": "IM Platform",
+    "code": "Pairing Code",
+    "codePlaceholder": "Enter pairing code, e.g., XHEWKYWS",
+    "approveBtn": "Approve Pairing",
+    "approving": "Pairing...",
+    "success": "Pairing successful",
+    "failed": "Pairing failed"
+  },
+  "retry": "Retry"
+}

@@ -1,0 +1,127 @@
+# ============================================================
+# ArmorClaw Full Image - Skill CLI Pre-install Layer (Global)
+# ============================================================
+# Based on openclaw base image, adds all Skill CLI tools.
+#
+# Direct installation from official sources:
+#   - npm packages: npmjs.org
+#   - Go modules: proxy.golang.org
+#   - Python packages: pypi.org
+#   - Pre-compiled binaries: GitHub Releases
+#
+# Usage:
+#   docker build -t armorclaw:full \
+#     --build-arg BASE_IMAGE=openclaw:base \
+#     -f Dockerfile.full .
+#
+# Tool list maintenance:
+#   After modifying tool lists, update skills-deps.yaml reference
+#   and the TOOLS verification list in build.sh.
+# ============================================================
+
+ARG BASE_IMAGE=openclaw:base
+FROM ${BASE_IMAGE}
+
+USER root
+
+# ======================== Build arguments ========================
+
+# Go proxy (official)
+ARG GOPROXY="https://proxy.golang.org,direct"
+
+# npm registry (official)
+ARG NPM_REGISTRY="https://registry.npmjs.org"
+
+# pip index (official)
+ARG PIP_INDEX="https://pypi.org/simple"
+
+ENV GOPROXY=${GOPROXY}
+
+# ======================== Pre-compiled binaries (GitHub Releases) ========================
+
+# Install 1Password CLI (official APT repo)
+RUN ARCH=$(dpkg --print-architecture) && \
+    curl -sS https://downloads.1password.com/linux/keys/1password.asc -o /tmp/1password.asc && \
+    ACTUAL_FP=$(gpg --with-colons --import-options show-only --import /tmp/1password.asc 2>/dev/null | awk -F: '/^fpr:/{print $10; exit}') && \
+    EXPECTED_FP="3FEF9748469ADBE15DA7CA80AC2D62742012EA22" && \
+    if [ "$ACTUAL_FP" != "$EXPECTED_FP" ]; then echo "ERROR: GPG key mismatch"; exit 1; fi && \
+    gpg --dearmor < /tmp/1password.asc > /usr/share/keyrings/1password-archive-keyring.gpg && \
+    rm -f /tmp/1password.asc && \
+    echo "deb [arch=${ARCH} signed-by=/usr/share/keyrings/1password-archive-keyring.gpg] https://downloads.1password.com/linux/debian/${ARCH} stable main" \
+      > /etc/apt/sources.list.d/1password.list && \
+    apt-get update -qq && apt-get install -y 1password-cli && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# Install himalaya + openhue (from GitHub Releases)
+RUN ARCH=$(dpkg --print-architecture) && \
+    UNAME_ARCH=$(uname -m) && \
+    for bin in himalaya openhue; do \
+      echo "[install] Downloading $bin from GitHub Releases ..."; \
+      if [ "$bin" = "himalaya" ]; then \
+        harch=$([ "$UNAME_ARCH" = "aarch64" ] && echo aarch64 || echo x86_64); \
+        curl -fsSL "https://github.com/pimalaya/himalaya/releases/download/v1.1.0/himalaya.${harch}-linux.tgz" | \
+        tar -xz -C /usr/local/bin/ && chmod +x /usr/local/bin/himalaya || echo "[WARN] Failed to install himalaya"; \
+      elif [ "$bin" = "openhue" ]; then \
+        oarch=$([ "$UNAME_ARCH" = "aarch64" ] && echo arm64 || echo x86_64); \
+        curl -fsSL "https://github.com/openhue/openhue-cli/releases/download/0.23/openhue_Linux_${oarch}.tar.gz" | \
+        tar -xz -C /usr/local/bin/ openhue && chmod +x /usr/local/bin/openhue || echo "[WARN] Failed to install openhue"; \
+      fi; \
+    done
+
+# ======================== Node CLIs (official npm registry) ========================
+
+RUN (npm install -g @anthropic-ai/claude-code   || echo "[WARN] Failed to install claude-code") && \
+    (npm install -g obsidian-cli                 || echo "[WARN] Failed to install obsidian-cli") && \
+    (npm install -g clawhub                      || echo "[WARN] Failed to install clawhub") && \
+    (npm install -g mcporter                     || echo "[WARN] Failed to install mcporter") && \
+    (npm install -g @steipete/summarize           || echo "[WARN] Failed to install summarize") && \
+    (npm install -g @steipete/oracle              || echo "[WARN] Failed to install oracle") && \
+    (npm install -g gog                          || echo "[WARN] Failed to install gog") && \
+    (npm install -g @google/gemini-cli           || echo "[WARN] Failed to install gemini-cli") && \
+    npm cache clean --force 2>/dev/null; true
+
+# ======================== Go CLIs (official Go proxy) ========================
+
+RUN (go install github.com/steipete/blucli/cmd/blu@latest         || echo "[WARN] Failed to install blu") && \
+    (go install github.com/steipete/camsnap/cmd/camsnap@latest     || echo "[WARN] Failed to install camsnap") && \
+    (go install github.com/steipete/eightctl/cmd/eightctl@latest   || echo "[WARN] Failed to install eightctl") && \
+    (go install github.com/steipete/goplaces/cmd/goplaces@latest   || echo "[WARN] Failed to install goplaces") && \
+    (go install github.com/steipete/ordercli/cmd/ordercli@latest   || echo "[WARN] Failed to install ordercli") && \
+    (go install github.com/steipete/sonoscli/cmd/sonos@latest      || echo "[WARN] Failed to install sonos") && \
+    (go install github.com/steipete/songsee/cmd/songsee@latest     || echo "[WARN] Failed to install songsee") && \
+    (go install github.com/steipete/wacli/cmd/wacli@latest         || echo "[WARN] Failed to install wacli") && \
+    (go install github.com/Hyaxia/blogwatcher/cmd/blogwatcher@latest || echo "[WARN] Failed to install blogwatcher") && \
+    for bin in blu camsnap eightctl goplaces ordercli sonos songsee wacli blogwatcher; do \
+      [ -f "${GOPATH}/bin/$bin" ] && ln -sf "${GOPATH}/bin/$bin" "/usr/local/bin/$bin" || true; \
+    done && \
+    go clean -cache -modcache 2>/dev/null; \
+    rm -rf "${GOPATH}/pkg" 2>/dev/null; true
+
+# ======================== Python packages (official PyPI) ========================
+
+RUN pip3 install --break-system-packages --no-cache-dir openai-whisper || echo "[WARN] Failed to install openai-whisper"
+
+# ======================== uv tools ========================
+
+RUN (uv tool install nano-pdf && \
+     cp "$(readlink -f /root/.local/bin/nano-pdf)" /usr/local/bin/nano-pdf && \
+     chmod 755 /usr/local/bin/nano-pdf) || echo "[WARN] Failed to install nano-pdf"
+
+# ======================== Optional: user custom packages ========================
+# Security: only allow valid apt package name format [a-zA-Z0-9][a-zA-Z0-9.+-]*
+
+ARG EXTRA_APT_PACKAGES=""
+RUN if [ -n "$EXTRA_APT_PACKAGES" ]; then \
+      for pkg in $EXTRA_APT_PACKAGES; do \
+        echo "$pkg" | grep -qE '^[a-zA-Z0-9][a-zA-Z0-9.+\-]*$' || \
+          { echo "ERROR: Invalid package name: $pkg"; exit 1; }; \
+      done && \
+      apt-get update && \
+      DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends $EXTRA_APT_PACKAGES && \
+      apt-get clean && \
+      rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/*; \
+    fi
+
+# ======================== Switch back to non-root user ========================
+
+USER node

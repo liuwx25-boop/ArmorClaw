@@ -1,0 +1,73 @@
+{
+  "resources": {
+    "title": "Container Resources",
+    "subtitle": "View and manage openclaw container resource configuration and usage",
+    "tabs": {
+      "usage": "Usage",
+      "limits": "Limits",
+      "settings": "Settings"
+    },
+    "autoRefresh": "Auto Refresh",
+    "refresh": "Refresh",
+    "loading": "Loading container resources...",
+    "error": "Failed to load container resources. Make sure the container is running.",
+    "electronOnly": "Only available in desktop client"
+  },
+  "metrics": {
+    "cpu": "CPU",
+    "memory": "Memory",
+    "processes": "Processes",
+    "disk": "Disk Usage",
+    "networkIO": "Network I/O",
+    "diskIO": "Disk I/O",
+    "inboundOutbound": "Inbound / Outbound",
+    "readWrite": "Read / Write"
+  },
+  "settings": {
+    "title": "Resource Configuration",
+    "saveAndApply": "Save & Apply",
+    "reset": "Reset",
+    "restartNow": "Restart Container Now",
+    "saving": "Saving...",
+    "saved": "Saved",
+    "restartRequired": "Container restart required for changes to take effect"
+  },
+  "presets": {
+    "light": {
+      "name": "Light Mode",
+      "desc": "Simple daily Q&A"
+    },
+    "standard": {
+      "name": "Standard Mode",
+      "desc": "Recommended for regular use"
+    },
+    "high": {
+      "name": "High Performance",
+      "desc": "Complex Skill execution"
+    }
+  },
+  "installer": {
+    "title": "ArmorClaw",
+    "subtitle": "AI Assistant",
+    "checking": "Environment Check",
+    "os": "Operating System",
+    "docker": "Docker Environment",
+    "dockerStatus": "Docker Status",
+    "installed": "Installed",
+    "notInstalled": "Not Installed",
+    "running": "Running",
+    "notRunning": "Not Running",
+    "startInstall": "Start Installation",
+    "recheck": "Recheck",
+    "reinstall": "Reinstall",
+    "installing": "Installing...",
+    "homebrew": {
+      "hint": "Recommended: install Docker via Homebrew",
+      "command": "Run: brew install --cask docker"
+    },
+    "image": {
+      "loading": "Loading Docker image...",
+      "success": "Image loaded successfully"
+    }
+  }
+}

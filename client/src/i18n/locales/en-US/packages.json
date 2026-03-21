@@ -1,0 +1,71 @@
+{
+  "title": "Points Store",
+  "subtitle": "Choose a points package for AI model usage",
+  "discount": "{{percent}}% Bonus",
+  "validity": "Valid for: {{period}}",
+  "points": "{{count}} Points",
+  "buy": "Buy",
+  "loading": "Loading packages...",
+  "error": "Failed to load packages",
+  "payment": {
+    "selectMethod": "Select Payment Method",
+    "wechat": "WeChat Pay",
+    "alipay": "Alipay",
+    "creating": "Creating order...",
+    "qrcode": {
+      "title": "Scan to Pay",
+      "amount": "Amount",
+      "remaining": "Time Remaining",
+      "waiting": "Waiting for payment...",
+      "claimedPaid": "Admin notified, waiting for confirmation...",
+      "iHavePaid": "I've Paid",
+      "scanWith": "Scan with {{app}} to complete payment"
+    },
+    "result": {
+      "success": "Payment Successful",
+      "successDesc": "Points added. Check usage statistics for details.",
+      "expired": "Order Expired",
+      "expiredDesc": "Payment timeout. Please try again."
+    },
+    "cancel": "Cancel Payment"
+  },
+  "pricing": {
+    "title": "Model Pricing",
+    "subtitle": "Pricing for different AI models.",
+    "loading": "Loading prices...",
+    "tabs": {
+      "llm": "Text Models",
+      "image_gen": "Image Models",
+      "video_gen": "Video Models"
+    },
+    "table": {
+      "modelName": "Model Name",
+      "contextLength": "Context Length",
+      "contextLengthUnit": "K tokens",
+      "inputPrice": "Input Price",
+      "outputPrice": "Output Price",
+      "cachedPrice": "Cache Hit",
+      "cacheStorage": "Cache Storage",
+      "priceUnit": "Points/K tokens",
+      "cacheStorageUnit": "Points/K tokens/hour"
+    },
+    "billingMode": {
+      "token": "Token-based Billing",
+      "dimension": "Dimension-based Billing"
+    },
+    "imageTable": {
+      "resolution": "Resolution",
+      "pricePerImage": "Points/Image",
+      "anyResolution": "Any Resolution"
+    },
+    "videoTable": {
+      "resolution": "Resolution",
+      "maxDuration": "Max Duration",
+      "audio": "Audio",
+      "customVoice": "Custom Voice",
+      "pricePerSecond": "Points/Second"
+    },
+    "noPrice": "No pricing configured",
+    "noModels": "No models in this category"
+  }
+}

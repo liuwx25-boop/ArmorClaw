@@ -1,0 +1,10 @@
+{
+  "theme": {
+    "switchToLight": "Switch to Light Mode",
+    "switchToDark": "Switch to Dark Mode"
+  },
+  "language": {
+    "switchToEn": "Switch to English",
+    "switchToZh": "切换到中文"
+  }
+}

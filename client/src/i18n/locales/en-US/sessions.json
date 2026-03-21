@@ -1,0 +1,80 @@
+{
+  "title": "Session Management",
+  "subtitle": "View and manage all sessions in ArmorClaw",
+  "totalSessions": "{{count}} sessions",
+  "totalTokens": "Total {{tokens}} tokens",
+  "refresh": "Refresh",
+  "refreshing": "Refreshing...",
+  "loading": "Loading sessions...",
+  "empty": "No sessions",
+  "kinds": {
+    "direct": "Direct",
+    "group": "Group",
+    "global": "Global",
+    "unknown": "Unknown"
+  },
+  "channels": {
+    "wecom": "WeCom",
+    "feishu": "Feishu",
+    "dingtalk": "DingTalk",
+    "qqbot": "QQ",
+    "telegram": "Telegram",
+    "discord": "Discord"
+  },
+  "table": {
+    "session": "Session",
+    "channel": "Channel",
+    "model": "Model",
+    "tokens": "Tokens",
+    "lastActive": "Last Active",
+    "actions": "Actions"
+  },
+  "actions": {
+    "viewMessages": "View Messages",
+    "reset": "Reset",
+    "compact": "Compact",
+    "delete": "Delete"
+  },
+  "modal": {
+    "delete": {
+      "title": "Confirm Delete Session",
+      "description": "Delete this session? Chat history will be cleared and cannot be recovered."
+    },
+    "reset": {
+      "title": "Reset Session",
+      "generating": "Generating new Session ID...",
+      "tokenReset": "Token count reset to zero",
+      "keepConfig": "Model and channel configuration preserved",
+      "keepHistory": "Old chat history remains on disk for manual cleanup"
+    },
+    "compact": {
+      "title": "Compact Chat History",
+      "description": "Compacting keeps recent messages and removes older history to reduce token usage.",
+      "keepRecent": "Keep recent",
+      "messages": "messages",
+      "suggestion": "Recommended: 50-100. Token usage will be significantly reduced after compacting."
+    },
+    "preview": {
+      "title": "Message Preview"
+    }
+  },
+  "buttons": {
+    "confirmDelete": "Confirm Delete",
+    "confirmReset": "Confirm Reset",
+    "confirmCompact": "Confirm Compact"
+  },
+  "roles": {
+    "user": "User",
+    "assistant": "AI"
+  },
+  "success": {
+    "delete": "Session deleted",
+    "reset": "Session reset",
+    "compact": "Chat history compacted"
+  },
+  "error": {
+    "delete": "Failed to delete session",
+    "reset": "Failed to reset session",
+    "compact": "Failed to compact chat history"
+  }
+}

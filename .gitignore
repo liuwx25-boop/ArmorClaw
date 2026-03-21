@@ -1,0 +1,22 @@
+# ============================================================
+# ArmorClaw-Client .gitignore (GitHub version)
+# ============================================================
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Exclude gitee-builder (Gitee-specific)
+image-builder/gitee-builder/
+
+# Build artifacts
+*.log
+
+# Sync scripts (GitHub users don't need these)
+sync-github.sh

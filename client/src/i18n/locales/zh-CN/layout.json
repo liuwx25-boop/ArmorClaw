@@ -1,0 +1,10 @@
+{
+  "theme": {
+    "switchToLight": "切换为浅色模式",
+    "switchToDark": "切换为深色模式"
+  },
+  "language": {
+    "switchToEn": "Switch to English",
+    "switchToZh": "切换到中文"
+  }
+}

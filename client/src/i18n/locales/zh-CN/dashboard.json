@@ -1,0 +1,13 @@
+{
+  "ready": "ArmorClaw 已就绪",
+  "containerStatus": "容器状态:",
+  "status": {
+    "running": "🟢 运行中",
+    "stopped": "🔴 已停止"
+  },
+  "actions": {
+    "stop": "停止服务",
+    "start": "启动服务"
+  },
+  "serviceUrl": "服务地址:"
+}

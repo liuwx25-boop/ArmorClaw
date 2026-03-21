@@ -1,0 +1,31 @@
+{
+  "title": "Usage Statistics",
+  "subtitle": "View points balance and consumption",
+  "balance": {
+    "current": "Current Balance",
+    "monthly": "Monthly Usage",
+    "weekly": "Weekly Usage"
+  },
+  "table": {
+    "title": "Usage Records",
+    "total": "{{count}} records",
+    "time": "Time",
+    "model": "Model",
+    "type": "Type",
+    "details": "Details",
+    "points": "Points Used"
+  },
+  "types": {
+    "text": "Text",
+    "image": "Image",
+    "video": "Video"
+  },
+  "filter": {
+    "allModels": "All Models",
+    "startDate": "Start Date",
+    "endDate": "End Date",
+    "reset": "Reset"
+  },
+  "empty": "No usage records",
+  "loading": "Loading..."
+}
